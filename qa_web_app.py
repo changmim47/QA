@@ -1,7 +1,7 @@
 # 📋 게시판 상담 QA 평가 웹앱 (안정형: 평가 항목 축소 + 건수 제한 + timeout 설정)
 
 import streamlit as st
-from openai import OpenAI
+import openai
 import os
 from dotenv import load_dotenv
 import pandas as pd
@@ -9,7 +9,7 @@ import io
 
 # 🔐 환경 변수 불러오기
 load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # 🧾 웹앱 설정
 st.set_page_config(page_title="게시판 QA 자동 평가기", page_icon="📝")
@@ -50,7 +50,7 @@ if st.button("🧠 단건 QA 평가 실행"):
 **각 항목에 대해 점수(10점 만점)와 간단한 코멘트를 테이블로 마크다운 형식으로 출력해줘.**
             """
             try:
-                response = client.chat.completions.create(
+                response = openai.chat.completions.create(
                     model="gpt-3.5-turbo",
                     messages=[{"role": "user", "content": prompt}],
                     temperature=0.4,
